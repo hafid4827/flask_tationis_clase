@@ -1,0 +1,33 @@
+{% extends "./base/base.html" %}
+<!--  -->
+{% block title %} probando for e if {% endblock%}
+<!--  -->
+
+{% macro item_list(id, name, anos, ciudad) %}
+    <li>
+        <ol>
+            <li>{{ id }}</li>
+            <li>{{ name }}</li>
+            <li>{{ anos }}</li>
+            <li>{{ ciudad }}</li>
+        </ol>
+    </li>
+{% endmacro %}
+
+
+{% block content %}
+<ul>
+  {% for item in items %}
+    {% if items[item]["anos"] != "" %}
+        {{ 
+            item_list(
+                items[item]['id'],
+                item|upper,
+                items[item]["anos"],
+                items[item]["ciudad"] 
+            ) 
+        }}
+    {% endif %}
+  {% endfor %}
+</ul>
+{% endblock %}
