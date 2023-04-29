@@ -1,6 +1,19 @@
-from flask import Flask, render_template, redirect, url_for, request
+from flask import Flask, render_template, redirect, url_for, request, session
+from flask_session import Session
+from os import urandom
+
+from login import login_change
 
 app = Flask("main_exampel_flask")
+
+app.register_blueprint(login_change)
+
+app.config["SESSION_PERMANENT"] = False
+app.config["SESSION_TYPE"] = "filesystem"
+
+app.secret_key = urandom(24)
+
+Session(app)
 
 
 @app.route("/", methods=["GET"])
@@ -8,22 +21,12 @@ def index():
     return render_template("index.html", name="joshua", holamundo="holamundo")
 
 
-@app.route("/login", methods=["GET", "POST"])
-def login():
-    try:
-        user_name = request.form['user_name']
-        user_password = request.form['user_password']
-        if user_name == "joshua" and user_password == "123456":
-            return redirect(url_for("admin", user_name=user_name, user_password=user_password))
-    except:
-        pass
-
-    return render_template('login.html')
-
-
-@app.route("/admin/<user_name>/<user_password>")
-def admin(user_name, user_password):
-    return render_template("admin.html", user_name=user_name, user_password=user_password)
+@app.route("/admin")
+def admin():
+    if session.get("user_name") and session.get("user_password"):
+        return render_template("admin.html")
+    
+    return redirect(url_for("user.login"))
 
 
 @app.route("/nombre/<nombre_param>", methods=["GET"])
@@ -31,7 +34,6 @@ def name_list(nombre_param):
     saludando = str(nombre_param) + "como te encuentras hoy"
     print(saludando)
     return render_template('saludo.html', name=saludando)
-
 
 @app.route("/redireccionmiento/home")
 def redirect_home():
