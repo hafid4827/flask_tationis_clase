@@ -1,7 +1,7 @@
 from flask import render_template, redirect, url_for, request, session, Blueprint
 
 
-login_change = Blueprint("login", __name__, template_folder="templates")
+login_change = Blueprint("user", __name__, template_folder="templates")
 
 @login_change.route("/login", methods=["GET", "POST"])
 def login():
@@ -20,4 +20,4 @@ def logout():
     if session.get("user_name") and session.get("user_password"):
         session["user_name"] = None
         session["user_password"] = None
-    return redirect(url_for('login.login'))
+    return redirect(url_for('login'))

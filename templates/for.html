@@ -4,30 +4,40 @@
 <!--  -->
 
 {% macro item_list(id, name, anos, ciudad) %}
-    <li>
-        <ol>
-            <li>{{ id }}</li>
-            <li>{{ name }}</li>
-            <li>{{ anos }}</li>
-            <li>{{ ciudad }}</li>
-        </ol>
-    </li>
-{% endmacro %}
+<li>
+  <ol>
+    <li>{{ id }}</li>
+    <li>{{ name }}</li>
+    <li>{{ anos }}</li>
+    <li>{{ ciudad }}</li>
+    <li><a href="/delete/{{ name }}">BORRAR</a></li>
+  </ol>
+</li>
+{% endmacro %} {% block content %}
+<h1>crear</h1>
+<form action="{{ url_for('create') }}" method="POST">
+  <div class=""><input type="text" name="nombre" placeholder="nombre" /></div>
+  <div class=""><input type="text" name="anos" placeholder="anos" /></div>
+  <div class=""><input type="text" name="id" placeholder="id" /></div>
+  <div class=""><input type="text" name="ciudad" placeholder="ciudad" /></div>
+  <button type="submit">enviar info</button>
+</form>
 
+<h1>editar</h1>
+<form action="{{ url_for('update') }}" method="POST">
+    <div class=""><input type="text" name="nombre" placeholder="nombre" /></div>
+    <div class=""><input type="text" name="anos" placeholder="anos" /></div>
+    <div class=""><input type="text" name="id" placeholder="id" /></div>
+    <div class=""><input type="text" name="ciudad" placeholder="ciudad" /></div>
+    <button type="submit">enviar info</button>
+</form>
 
-{% block content %}
 <ul>
-  {% for item in items %}
-    {% if items[item]["anos"] != "" %}
-        {{ 
-            item_list(
-                items[item]['id'],
-                item|upper,
-                items[item]["anos"],
-                items[item]["ciudad"] 
-            ) 
-        }}
-    {% endif %}
-  {% endfor %}
+  {% for item in items %} {% if items[item]["anos"] != "" %}
+  <!--  -->
+  {{ item_list(items[item]['id'], item|upper, items[item]["anos"],
+  items[item]["ciudad"] ) }}
+  <!--  -->
+  {% endif %} {% endfor %}
 </ul>
 {% endblock %}

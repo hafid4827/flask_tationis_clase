@@ -16,6 +16,35 @@ app.secret_key = urandom(24)
 Session(app)
 
 
+lista_items = {
+    "joshua": {
+        "id": "123123",
+        "anos": "123123123123123123",
+        "ciudad": "laksjdalkjlkasjd"
+    },
+    "guillermos": {
+        "id": "123123",
+        "anos": "123123123123123123",
+        "ciudad": "laksjdalkjlkasjd"
+    },
+    "sebastian": {
+        "id": "123123",
+        "anos": "",
+        "ciudad": "laksjdalkjlkasjd"
+    },
+    "lennin": {
+        "id": "123123",
+        "anos": "123123123123123123",
+        "ciudad": "laksjdalkjlkasjd"
+    },
+    "jeison": {
+        "id": "123123",
+        "anos": "123123123123123123",
+        "ciudad": "laksjdalkjlkasjd"
+    },
+}
+
+
 @app.route("/", methods=["GET"])
 def index():
     return render_template("index.html", name="joshua", holamundo="holamundo")
@@ -40,35 +69,47 @@ def redirect_home():
     return redirect(url_for("login"))
 
 
+@app.route("/create", methods=["POST"])
+def create():
+    global lista_items
+
+    nombre = request.form["nombre"]
+
+    info = dict(
+        anos = request.form["anos"],
+        id = request.form["id"],
+        ciudad = request.form["ciudad"]
+    )
+    parametro = {
+        nombre : info 
+    }
+    lista_items.update(parametro)
+    return redirect(url_for("probando"))
+
+@app.route('/delete/<name>')
+def delete_by_name(name):
+    global lista_items
+    del lista_items[name.lower()]
+    return redirect(url_for("probando"))
+
+@app.route("/update", methods=["POST"])
+def update():
+    global lista_items
+
+    nombre = request.form["nombre"]
+
+    info = dict(
+        anos = request.form["anos"],
+        id = request.form["id"],
+        ciudad = request.form["ciudad"]
+    )
+    lista_items[nombre.lower()] = info
+    return redirect(url_for("probando"))
+
+
 @app.route("/probando", methods=["GET"])
 def probando():
-    lista_items = {
-        "joshua": {
-            "id": "123123",
-            "anos": "123123123123123123",
-            "ciudad": "laksjdalkjlkasjd"
-        },
-        "guillermos": {
-            "id": "123123",
-            "anos": "123123123123123123",
-            "ciudad": "laksjdalkjlkasjd"
-        },
-        "sebastian": {
-            "id": "123123",
-            "anos": "",
-            "ciudad": "laksjdalkjlkasjd"
-        },
-        "lennin": {
-            "id": "123123",
-            "anos": "123123123123123123",
-            "ciudad": "laksjdalkjlkasjd"
-        },
-        "jeison": {
-            "id": "123123",
-            "anos": "123123123123123123",
-            "ciudad": "laksjdalkjlkasjd"
-        }
-    }
+    global lista_items
     return render_template("for.html", items=lista_items)
 
 
