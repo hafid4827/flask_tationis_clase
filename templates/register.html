@@ -1,0 +1,12 @@
+{% extends "./base/base.html" %} {% block title %} register {% endblock%} {%
+block content %}
+<h1>register</h1>
+<form action="{{ url_for('create_count') }}" method="POST">
+  <div class=""><input type="text" name="first_name" placeholder="first_name" /></div>
+  <div class=""><input type="number" name="age" placeholder="anos" /></div>
+  <div class=""><input type="email" name="email" placeholder="email" /></div>
+  <div class=""><input type="text" name="password" placeholder="contrasena" /></div>
+  <button type="submit">crear cuenta</button>
+</form>
+
+{% endblock %}
